@@ -1,3 +1,13 @@
+# Binaries
+Binaries/
+Intermediate/
+
+# Visual Studio
+.vs/
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj.user
+
 # Prerequisites
 *.d
 
