@@ -11,7 +11,7 @@
 
 int main(int argc, char* argv[])
 {
-	D3D11Application app {"Quiet Renderer Test"};
+	D3D11Application app {"Quiet Renderer Test" };
 	app.Run();
 	return 0;
 }

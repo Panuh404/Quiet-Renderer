@@ -25,10 +25,27 @@ private:
 	bool CreateSwapchainResources();
 	void DestroySwapchainResources();
 
+	// Core function for compiling shaders
+	bool CompileShader(	
+		const std::wstring& fileName,	// Path of the shader file we want to compile
+		const std::string& entryPoint,	// name of the function where the shader begins execution
+		const std::string& profile,		// HLSL version to use
+		ComPtr<ID3DBlob>& shaderBlob)	// buffer where our compiled code will be stored
+		const;
+
+	[[nodiscard]] ComPtr<ID3D11VertexShader> CreateVertexShader(const std::wstring& fileName,
+																ComPtr<ID3DBlob>& vertexShaderBlob) const;
+
+	[[nodiscard]] ComPtr<ID3D11PixelShader> CreatePixelShader(const std::wstring& fileName) const;
+
 	ComPtr<ID3D11Device> _device = nullptr;
 	ComPtr<ID3D11DeviceContext> _deviceContext = nullptr;
 	ComPtr<IDXGIFactory2> _dxgiFactory = nullptr;
 	ComPtr<IDXGISwapChain1> _swapChain = nullptr;
 	ComPtr<ID3D11RenderTargetView> _renderTarget = nullptr;
+	ComPtr<ID3D11Buffer> _triangleVertices = nullptr;
+	ComPtr<ID3D11InputLayout> _vertexLayout = nullptr;
+	ComPtr<ID3D11VertexShader> _vertexShader = nullptr;
+	ComPtr<ID3D11PixelShader> _pixelShader = nullptr;
 };
 

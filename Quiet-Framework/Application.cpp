@@ -16,15 +16,15 @@ bool Application::Initialize()
     // Initialize GLFW
     if (!glfwInit())
     {
-        std::cout << "GLFW: Unable to initialize\n";
+        std::cerr << "GLFW: Unable to initialize\n";
         return false;
     }
 
     // Get Primary Monitor and Resolution
     GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
-    _width = static_cast<int32_t>(videoMode->width * 0.9f);
-    _height = static_cast<int32_t>(videoMode->height * 0.9f);
+    _width = static_cast<int32_t>(videoMode->width * 0.8f);
+    _height = static_cast<int32_t>(videoMode->height * 0.8f);
 
     // More in (https://www.glfw.org/docs/3.3/group__window.html)
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_FALSE);// No scale    
@@ -34,7 +34,7 @@ bool Application::Initialize()
     _window = glfwCreateWindow(_width, _height, _title.data(), nullptr, nullptr);
     if (_window == nullptr)
     {
-        std::cout << "GLFW: Unable to create window\n";
+        std::cerr << "GLFW: Unable to create window\n";
         Cleanup();
         return false;
     }

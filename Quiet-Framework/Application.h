@@ -34,6 +34,6 @@ protected:
 private:
     std::chrono::high_resolution_clock::time_point _currentTime;
     GLFWwindow* _window = nullptr;
-    std::string_view _title;
+    std::string  _title;
 };
 
