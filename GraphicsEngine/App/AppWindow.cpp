@@ -9,7 +9,15 @@ struct VEC3
 struct vertex
 {
 	VEC3 position;
+	VEC3 position1;
 	VEC3 color;
+	VEC3 color1;
+};
+
+__declspec(align(16))
+struct constant
+{
+	unsigned int m_time;
 };
 
 AppWindow::AppWindow() {}
@@ -26,10 +34,10 @@ void AppWindow::OnCreate()
 	m_SwapChain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
 	vertex list[] = {
-	{-0.5f, -0.5f, 0.0f, 1, 0, 0},	// POS 1
-	{-0.5f,  0.5f, 0.0f, 0, 1, 0},	// POS 2
-	{ 0.5f, -0.5f, 0.0f, 0, 0, 1},	// POS 3
-	{ 0.5f,  0.5f, 0.0f, 1, 1, 0},	// POS 4
+	{-0.5f, -0.5f, 0.0f,	-0.32f,-0.11f,0.0f,		1, 0, 0,		0, 1, 1},	// POS 1
+	{-0.5f,  0.5f, 0.0f,	-0.11f, 0.78f,0.0f,		0, 1, 0,		1, 0, 1},	// POS 2
+	{ 0.5f, -0.5f, 0.0f,	 0.75f,-0.73f,0.0f,		0, 0, 1,		1, 1, 0},	// POS 3
+	{ 0.5f,  0.5f, 0.0f,	 0.88f, 0.5f, 0.0f,		1, 1, 0,		0, 0, 1},	// POS 4
 	};
 
 	m_VertexBuffer = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -48,6 +56,12 @@ void AppWindow::OnCreate()
 	GraphicsEngine::Get()->CompilePixelShader(L"Shaders/PixelShader.hlsl", "main", &shader_byte_code, &size_shader);
 	m_PixelShader = GraphicsEngine::Get()->CreatePixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::Get()->ReleaseCompiledShaders();
+
+	constant cc;
+	cc.m_time = 0;
+
+	m_ConstantBuffer = GraphicsEngine::Get()->CreateConstantBuffer();
+	m_ConstantBuffer->Load(&cc, sizeof(constant));
 }
 
 void AppWindow::OnUpdate()
@@ -59,6 +73,13 @@ void AppWindow::OnUpdate()
 	// Set Viewport
 	RECT rc = this->GetClientWindowRect();
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+
+	// Constant Buffer
+	constant cc;
+	cc.m_time = ::GetTickCount();
+	m_ConstantBuffer->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_VertexShader, m_ConstantBuffer);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_PixelShader, m_ConstantBuffer);
 
 	// Set Shaders in the graphics pipeline
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_VertexShader);

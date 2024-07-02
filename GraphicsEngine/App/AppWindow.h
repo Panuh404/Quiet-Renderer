@@ -3,6 +3,7 @@
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Graphics/SwapChain.h"
 #include "Engine/Graphics/VertexBuffer.h"
+#include "Engine/Graphics/ConstantBuffer.h"
 #include "Engine/Graphics/VertexShader.h"
 #include "Engine/Graphics/PixelShader.h"
 
@@ -18,9 +19,10 @@ public:
 	void OnDestroy() override;
 
 private:
-	SwapChain* m_SwapChain;
-	VertexBuffer* m_VertexBuffer;
-	VertexShader* m_VertexShader;
-	PixelShader* m_PixelShader;
+	SwapChain*		m_SwapChain;
+	VertexBuffer*	m_VertexBuffer;
+	ConstantBuffer* m_ConstantBuffer;
+	VertexShader*	m_VertexShader;
+	PixelShader*	m_PixelShader;
 };
 
