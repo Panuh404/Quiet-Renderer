@@ -4,6 +4,8 @@
 class SwapChain;
 class DeviceContext;
 class VertexBuffer;
+class VertexShader;
+class PixelShader;
 
 class GraphicsEngine
 {
@@ -14,14 +16,16 @@ public:
 	bool Init();		// Initialize GraphicsEngine and DirectX 11 Device
 	bool Release();		// Release all resources loaded
 
-	SwapChain*		CreateSwapChain();
 	DeviceContext*	GetImmediateDeviceContext();
-	VertexBuffer*	CreateVertexBuffer();
 
-	// TEMP
-	bool CreateShaders();
-	bool SetShaders();
-	void GetShaderBufferAndSize(void** bytecode, UINT* size);
+	SwapChain*		CreateSwapChain();
+	VertexBuffer*	CreateVertexBuffer();
+	VertexShader*	CreateVertexShader(const void* shader_byte_code, size_t byte_Code_Size);
+	PixelShader*	CreatePixelShader(const void* shader_byte_code, size_t byte_Code_Size);
+
+	bool CompileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
+	bool CompilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
+	void ReleaseCompiledShaders();
 
 	static GraphicsEngine* Get();
 
@@ -36,13 +40,16 @@ private:
 	IDXGIFactory* m_DXGIFactory;
 	ID3D11DeviceContext* m_IMMContext;
 
+	ID3DBlob* m_Blob = nullptr;
+
 	// Temp
 	ID3DBlob* m_vsblob = nullptr;
 	ID3DBlob* m_psblob = nullptr;
-	ID3D11VertexShader* m_vs = nullptr;
 	ID3D11PixelShader* m_ps = nullptr;
 
 	friend class SwapChain;
 	friend class VertexBuffer;
+	friend class VertexShader;
+	friend class PixelShader;
 };
 

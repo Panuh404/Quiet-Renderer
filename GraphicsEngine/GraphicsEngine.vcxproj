@@ -93,6 +93,8 @@
     <ClCompile Include="Engine\Graphics\GraphicsEngine.cpp" />
     <ClCompile Include="Engine\Graphics\SwapChain.cpp" />
     <ClCompile Include="Engine\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\VertexShader.cpp" />
+    <ClCompile Include="Engine\Graphics\PixelShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\AppWindow.h" />
@@ -101,6 +103,18 @@
     <ClInclude Include="Engine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="Engine\Graphics\SwapChain.h" />
     <ClInclude Include="Engine\Graphics\VertexBuffer.h" />
+    <ClInclude Include="Engine\Graphics\VertexShader.h" />
+    <ClInclude Include="Engine\Graphics\PixelShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

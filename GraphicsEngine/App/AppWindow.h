@@ -3,6 +3,8 @@
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Graphics/SwapChain.h"
 #include "Engine/Graphics/VertexBuffer.h"
+#include "Engine/Graphics/VertexShader.h"
+#include "Engine/Graphics/PixelShader.h"
 
 class AppWindow : public Window
 {
@@ -18,5 +20,7 @@ public:
 private:
 	SwapChain* m_SwapChain;
 	VertexBuffer* m_VertexBuffer;
+	VertexShader* m_VertexShader;
+	PixelShader* m_PixelShader;
 };
 
