@@ -1,5 +1,5 @@
 #include "SwapChain.h"
-#include "Graphics.h"
+#include "GraphicsEngine.h"
 
 SwapChain::SwapChain()
 {
@@ -11,7 +11,7 @@ SwapChain::~SwapChain()
 
 bool SwapChain::Init(HWND hwnd, UINT width, UINT height)
 {
-	ID3D11Device* device = Graphics::Get()->m_D3DDevice;
+	ID3D11Device* device = GraphicsEngine::Get()->m_D3DDevice;
 
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -28,7 +28,7 @@ bool SwapChain::Init(HWND hwnd, UINT width, UINT height)
 	desc.Windowed = true;
 
 	// Create the swap chain for the window indicated by HWND parameter
-	HRESULT hr = Graphics::Get()->m_DXGIFactory->CreateSwapChain(device, &desc, &m_SwapChain);
+	HRESULT hr = GraphicsEngine::Get()->m_DXGIFactory->CreateSwapChain(device, &desc, &m_SwapChain);
 	if (FAILED(hr))
 	{
 		return false;

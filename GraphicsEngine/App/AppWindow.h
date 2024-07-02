@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine/Window/Window.h"
-#include "Engine/Graphics/Graphics.h"
+#include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Graphics/SwapChain.h"
+#include "Engine/Graphics/VertexBuffer.h"
 
 class AppWindow : public Window
 {
@@ -16,5 +17,6 @@ public:
 
 private:
 	SwapChain* m_SwapChain;
+	VertexBuffer* m_VertexBuffer;
 };
 
