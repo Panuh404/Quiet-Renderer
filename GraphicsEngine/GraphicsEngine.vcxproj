@@ -101,6 +101,8 @@
     <ClInclude Include="App\AppWindow.h" />
     <ClInclude Include="Engine\Graphics\ConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\DeviceContext.h" />
+    <ClInclude Include="Engine\Math\Matrix4x4.h" />
+    <ClInclude Include="Engine\Math\Vector3D.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="Engine\Graphics\SwapChain.h" />

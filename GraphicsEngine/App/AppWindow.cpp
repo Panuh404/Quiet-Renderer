@@ -1,28 +1,59 @@
 #include "AppWindow.h"
-#include "Engine/Graphics/DeviceContext.h"
 
-struct VEC3
-{
-	float x, y, z;
-};
+#include <cmath>
+
+#include "Engine/Graphics/DeviceContext.h"
+#include "Engine/Math/Matrix4x4.h"
+#include "Engine/Math/Vector3D.h"
 
 struct vertex
 {
-	VEC3 position;
-	VEC3 position1;
-	VEC3 color;
-	VEC3 color1;
+	Vector3D position;
+	Vector3D position1;
+	Vector3D color;
+	Vector3D color1;
 };
 
 __declspec(align(16))
 struct constant
 {
+	Matrix4x4 m_world;
+	Matrix4x4 m_view;
+	Matrix4x4 m_proj;
 	unsigned int m_time;
 };
 
 AppWindow::AppWindow() {}
 
 AppWindow::~AppWindow() {}
+
+void AppWindow::UpdateQuadPosition()
+{
+	constant cc;
+	Matrix4x4 temp;
+	m_DeltaPos += m_DeltaTime / 6.0f;
+	if (m_DeltaPos > 1.0f)
+	{
+		m_DeltaPos = 0;
+	}
+	m_DeltaScale += m_DeltaTime * 6.0f;
+
+	cc.m_time = ::GetTickCount();
+
+	cc.m_world.SetScale(Vector3D::Lerp(Vector3D(0.5, 0.5, 0), Vector3D(1, 1, 0), (sin(m_DeltaScale) + 1.0f)/2.0f));
+	temp.SetTranslation(Vector3D::Lerp(Vector3D(-1.5,-1.5,0), Vector3D(1.5, 1.5, 0), m_DeltaPos));
+	cc.m_world *= temp;
+	cc.m_view.SetIdentity();
+	cc.m_proj.SetOrthoLH
+	(
+		(this->GetClientWindowRect().right - this->GetClientWindowRect().left) / 400.0f,
+		(this->GetClientWindowRect().bottom - this->GetClientWindowRect().top) / 400.0f,
+		-4.0f,
+		4.0f
+	);
+
+	m_ConstantBuffer->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
+}
 
 void AppWindow::OnCreate()
 {
@@ -34,10 +65,10 @@ void AppWindow::OnCreate()
 	m_SwapChain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
 	vertex list[] = {
-	{-0.5f, -0.5f, 0.0f,	-0.32f,-0.11f,0.0f,		1, 0, 0,		0, 1, 1},	// POS 1
-	{-0.5f,  0.5f, 0.0f,	-0.11f, 0.78f,0.0f,		0, 1, 0,		1, 0, 1},	// POS 2
-	{ 0.5f, -0.5f, 0.0f,	 0.75f,-0.73f,0.0f,		0, 0, 1,		1, 1, 0},	// POS 3
-	{ 0.5f,  0.5f, 0.0f,	 0.88f, 0.5f, 0.0f,		1, 1, 0,		0, 0, 1},	// POS 4
+		{Vector3D(-0.5f, -0.5f, 0.0f),Vector3D(-0.32f,-0.11f,0.0f), Vector3D(1, 0, 0), Vector3D(0, 1, 1)},	// POS 1
+		{Vector3D(-0.5f,  0.5f, 0.0f),Vector3D(-0.11f, 0.78f,0.0f), Vector3D(0, 1, 0), Vector3D(1, 0, 1)},	// POS 2
+		{Vector3D(0.5f,  -0.5f, 0.0f),Vector3D( 0.75f,-0.73f,0.0f), Vector3D(0, 0, 1), Vector3D(1, 1, 0)},	// POS 3
+		{Vector3D(0.5f,   0.5f, 0.0f),Vector3D( 0.88f, 0.5f, 0.0f), Vector3D(1, 1, 0), Vector3D(0, 0, 1)},	// POS 4
 	};
 
 	m_VertexBuffer = GraphicsEngine::Get()->CreateVertexBuffer();
@@ -75,9 +106,8 @@ void AppWindow::OnUpdate()
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	// Constant Buffer
-	constant cc;
-	cc.m_time = ::GetTickCount();
-	m_ConstantBuffer->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
+	UpdateQuadPosition();
+
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_VertexShader, m_ConstantBuffer);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_PixelShader, m_ConstantBuffer);
 
@@ -90,6 +120,11 @@ void AppWindow::OnUpdate()
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_VertexBuffer->GetSizeVertexList(), 0);
 
 	m_SwapChain->Present(true);
+
+	// Calculate DeltaTime
+	m_OldDelta = m_NewDelta;
+	m_NewDelta = ::GetTickCount();
+	m_DeltaTime = (m_OldDelta) ? (m_NewDelta - m_OldDelta) / 1000.0f : 0;
 }
 
 void AppWindow::OnDestroy()

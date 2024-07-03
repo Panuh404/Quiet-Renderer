@@ -13,6 +13,8 @@ public:
 	AppWindow();
 	~AppWindow();
 
+	void UpdateQuadPosition();
+
 	// Inherited via window
 	void OnCreate() override;
 	void OnUpdate() override;
@@ -24,5 +26,12 @@ private:
 	ConstantBuffer* m_ConstantBuffer;
 	VertexShader*	m_VertexShader;
 	PixelShader*	m_PixelShader;
+
+	float m_OldDelta;
+	float m_NewDelta;
+	float m_DeltaTime;
+
+	float m_DeltaPos;
+	float m_DeltaScale;
 };
 
