@@ -8,6 +8,7 @@
 #include "VertexBuffer.h"
 #include "VertexShader.h"
 #include "DeviceContext.h"
+#include "IndexBuffer.h"
 #include "PixelShader.h"
 
 GraphicsEngine::GraphicsEngine() {}
@@ -85,6 +86,11 @@ DeviceContext* GraphicsEngine::GetImmediateDeviceContext()
 VertexBuffer* GraphicsEngine::CreateVertexBuffer()
 {
 	return new VertexBuffer();
+}
+
+IndexBuffer* GraphicsEngine::CreateIndexBuffer()
+{
+	return new IndexBuffer();
 }
 
 ConstantBuffer* GraphicsEngine::CreateConstantBuffer()

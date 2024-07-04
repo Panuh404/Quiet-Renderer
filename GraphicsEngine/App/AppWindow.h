@@ -3,6 +3,7 @@
 #include "Engine/Graphics/GraphicsEngine.h"
 #include "Engine/Graphics/SwapChain.h"
 #include "Engine/Graphics/VertexBuffer.h"
+#include "Engine/Graphics/IndexBuffer.h"
 #include "Engine/Graphics/ConstantBuffer.h"
 #include "Engine/Graphics/VertexShader.h"
 #include "Engine/Graphics/PixelShader.h"
@@ -23,6 +24,7 @@ public:
 private:
 	SwapChain*		m_SwapChain;
 	VertexBuffer*	m_VertexBuffer;
+	IndexBuffer*	m_IndexBuffer;
 	ConstantBuffer* m_ConstantBuffer;
 	VertexShader*	m_VertexShader;
 	PixelShader*	m_PixelShader;

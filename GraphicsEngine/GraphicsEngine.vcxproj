@@ -96,6 +96,7 @@
     <ClCompile Include="Engine\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\PixelShader.cpp" />
+    <ClCompile Include="Engine\Graphics\IndexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\AppWindow.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="Engine\Graphics\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\PixelShader.h" />
+    <ClInclude Include="Engine\Graphics\IndexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">

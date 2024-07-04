@@ -5,6 +5,7 @@ class SwapChain;
 class DeviceContext;
 class VertexBuffer;
 class ConstantBuffer;
+class IndexBuffer;
 class VertexShader;
 class PixelShader;
 
@@ -18,9 +19,10 @@ public:
 	bool Release();		// Release all resources loaded
 
 	DeviceContext*	GetImmediateDeviceContext();
-
 	SwapChain*		CreateSwapChain();
+
 	VertexBuffer*	CreateVertexBuffer();
+	IndexBuffer*	CreateIndexBuffer();
 	ConstantBuffer* CreateConstantBuffer();
 
 	VertexShader*	CreateVertexShader(const void* shader_byte_code, size_t byte_Code_Size);
@@ -52,6 +54,7 @@ private:
 
 	friend class SwapChain;
 	friend class VertexBuffer;
+	friend class IndexBuffer;
 	friend class ConstantBuffer;
 
 	friend class VertexShader;

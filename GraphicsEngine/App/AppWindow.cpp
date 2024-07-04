@@ -9,7 +9,6 @@
 struct vertex
 {
 	Vector3D position;
-	Vector3D position1;
 	Vector3D color;
 	Vector3D color1;
 };
@@ -36,13 +35,26 @@ void AppWindow::UpdateQuadPosition()
 	{
 		m_DeltaPos = 0;
 	}
-	m_DeltaScale += m_DeltaTime * 6.0f;
+	m_DeltaScale += m_DeltaTime * 1.0f;
 
 	cc.m_time = ::GetTickCount();
+	//cc.m_world.SetScale(Vector3D::Lerp(Vector3D(0.5, 0.5, 0), Vector3D(1, 1, 0), (sin(m_DeltaScale) + 1.0f)/2.0f));
+	//temp.SetTranslation(Vector3D::Lerp(Vector3D(-1.5,-1.5,0), Vector3D(1.5, 1.5, 0), m_DeltaPos));
+	//cc.m_world *= temp;
+	cc.m_world.SetScale(Vector3D(1,1,1));
 
-	cc.m_world.SetScale(Vector3D::Lerp(Vector3D(0.5, 0.5, 0), Vector3D(1, 1, 0), (sin(m_DeltaScale) + 1.0f)/2.0f));
-	temp.SetTranslation(Vector3D::Lerp(Vector3D(-1.5,-1.5,0), Vector3D(1.5, 1.5, 0), m_DeltaPos));
+	temp.SetIdentity();
+	temp.setRotationZ(m_DeltaScale);
 	cc.m_world *= temp;
+
+	temp.SetIdentity();
+	temp.setRotationY(m_DeltaScale);
+	cc.m_world *= temp;
+
+	temp.SetIdentity();
+	temp.setRotationX(m_DeltaScale);
+	cc.m_world *= temp;
+
 	cc.m_view.SetIdentity();
 	cc.m_proj.SetOrthoLH
 	(
@@ -64,15 +76,47 @@ void AppWindow::OnCreate()
 	RECT rc = this->GetClientWindowRect();
 	m_SwapChain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-	vertex list[] = {
-		{Vector3D(-0.5f, -0.5f, 0.0f),Vector3D(-0.32f,-0.11f,0.0f), Vector3D(1, 0, 0), Vector3D(0, 1, 1)},	// POS 1
-		{Vector3D(-0.5f,  0.5f, 0.0f),Vector3D(-0.11f, 0.78f,0.0f), Vector3D(0, 1, 0), Vector3D(1, 0, 1)},	// POS 2
-		{Vector3D(0.5f,  -0.5f, 0.0f),Vector3D( 0.75f,-0.73f,0.0f), Vector3D(0, 0, 1), Vector3D(1, 1, 0)},	// POS 3
-		{Vector3D(0.5f,   0.5f, 0.0f),Vector3D( 0.88f, 0.5f, 0.0f), Vector3D(1, 1, 0), Vector3D(0, 0, 1)},	// POS 4
+	vertex vertex_list[] = 
+	{
+		//FRONT FACE
+		{Vector3D(-0.5f,-0.5f,-0.5f),		Vector3D(0,0,0),		Vector3D(0,1,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),		Vector3D(1,1,0),		Vector3D(0,1,1) },
+		{ Vector3D(0.5f,0.5f,-0.5f),		Vector3D(0,0,1),		Vector3D(1,0,0) },
+		{ Vector3D(0.5f,-0.5f,-0.5f),		Vector3D(1,1,1),		Vector3D(0,0,1) },
+
+		//BACK FACE
+		{ Vector3D(0.5f,-0.5f,0.5f),		Vector3D(0,0,0),		Vector3D(0,1,0) },
+		{ Vector3D(0.5f,0.5f,0.5f),		Vector3D(1,1,0),		Vector3D(0,1,1) },
+		{ Vector3D(-0.5f,0.5f,0.5f),		Vector3D(0,0,1),		Vector3D(1,0,0) },
+		{ Vector3D(-0.5f,-0.5f,0.5f),		Vector3D(1,1,1),		Vector3D(0,0,0) }
 	};
+	unsigned int index_list[] =
+	{
+		//FRONT SIDE
+		0, 1, 2,
+		2, 3, 0,
+		//BACK SIDE
+		4, 5, 6,
+		6, 7, 4,
+		//TOP SIDE
+		1, 6, 5,
+		5, 2, 1,
+		//BOTTOM SIDE
+		7, 0, 3,
+		3, 4, 7,
+		//RIGHT SIDE
+		3, 2, 5,
+		5, 4, 3,
+		//LEFT SIDE
+		7, 6, 1,
+		1, 0, 7
+	};
+	UINT size_vertex_list = ARRAYSIZE(vertex_list);
+	UINT size_index_list = ARRAYSIZE(index_list);
 
 	m_VertexBuffer = GraphicsEngine::Get()->CreateVertexBuffer();
-	UINT size_list = ARRAYSIZE(list);
+	m_IndexBuffer = GraphicsEngine::Get()->CreateIndexBuffer();
+
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
@@ -80,7 +124,8 @@ void AppWindow::OnCreate()
 	// Vertex Shader
 	GraphicsEngine::Get()->CompileVertexShader(L"Shaders/VertexShader.hlsl", "main", &shader_byte_code, &size_shader);
 	m_VertexShader = GraphicsEngine::Get()->CreateVertexShader(shader_byte_code, size_shader);
-	m_VertexBuffer->Load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	m_VertexBuffer->Load(vertex_list, sizeof(vertex), size_vertex_list, shader_byte_code, size_shader);
+	m_IndexBuffer->Load(index_list, size_index_list);
 	GraphicsEngine::Get()->ReleaseCompiledShaders();
 
 	// Pixel Shader
@@ -113,11 +158,13 @@ void AppWindow::OnUpdate()
 
 	// Set Shaders in the graphics pipeline
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexShader(m_VertexShader);
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_VertexBuffer);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetPixelShader(m_PixelShader);
 
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetVertexBuffer(m_VertexBuffer);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetIndexBuffer(m_IndexBuffer);
+
 	// Draw
-	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawTriangleStrip(m_VertexBuffer->GetSizeVertexList(), 0);
+	GraphicsEngine::Get()->GetImmediateDeviceContext()->DrawIndexTriangleList(m_IndexBuffer->GetSizeIndexList(), 0, 0);
 
 	m_SwapChain->Present(true);
 
@@ -131,6 +178,8 @@ void AppWindow::OnDestroy()
 {
 	Window::OnDestroy();
 	m_VertexBuffer->Release();
+	m_IndexBuffer->Release();
+	m_ConstantBuffer->Release();
 	m_VertexShader->Release();
 	m_PixelShader->Release();
 	m_SwapChain->Release();
