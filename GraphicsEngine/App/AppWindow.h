@@ -7,8 +7,9 @@
 #include "Engine/Graphics/ConstantBuffer.h"
 #include "Engine/Graphics/VertexShader.h"
 #include "Engine/Graphics/PixelShader.h"
+#include "Engine/Input/InputListener.h"
 
-class AppWindow : public Window
+class  AppWindow : public Window, public InputListener
 {
 public:
 	AppWindow();
@@ -20,6 +21,18 @@ public:
 	void OnCreate() override;
 	void OnUpdate() override;
 	void OnDestroy() override;
+
+	void OnFocus() override;
+	void OnKillFocus() override;
+
+	// Inherited via InputListener
+	void OnKeyDown(int key) override;
+	void OnKeyUp(int key) override;
+	void OnMouseMove(const Point& delta_mouse_pos) override;
+	void OnLeftMouseDown(const Point& mouse_pos) override;
+	void OnLeftMouseUp(const Point& mouse_pos) override;
+	void OnRightMouseDown(const Point& mouse_pos) override;
+	void OnRightMouseUp(const Point& mouse_pos) override;
 
 private:
 	SwapChain*		m_SwapChain;
@@ -35,5 +48,10 @@ private:
 
 	float m_DeltaPos;
 	float m_DeltaScale;
+
+	float m_RotationX = 0.0f;
+	float m_RotationY = 0.0f;
+
+	float m_Scale = 1.0f;
 };
 

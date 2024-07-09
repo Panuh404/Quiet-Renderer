@@ -97,12 +97,15 @@
     <ClCompile Include="Engine\Graphics\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\PixelShader.cpp" />
     <ClCompile Include="Engine\Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="Engine\Input\InputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\AppWindow.h" />
     <ClInclude Include="Engine\Graphics\ConstantBuffer.h" />
     <ClInclude Include="Engine\Graphics\DeviceContext.h" />
+    <ClInclude Include="Engine\Input\InputListener.h" />
     <ClInclude Include="Engine\Math\Matrix4x4.h" />
+    <ClInclude Include="Engine\Math\Point.h" />
     <ClInclude Include="Engine\Math\Vector3D.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Graphics\GraphicsEngine.h" />
@@ -111,6 +114,7 @@
     <ClInclude Include="Engine\Graphics\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\PixelShader.h" />
     <ClInclude Include="Engine\Graphics\IndexBuffer.h" />
+    <ClInclude Include="Engine\Input\InputSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">

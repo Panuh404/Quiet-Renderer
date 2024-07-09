@@ -20,6 +20,9 @@ public:
 	virtual void OnUpdate();
 	virtual void OnDestroy();
 
+	virtual void OnFocus();
+	virtual void OnKillFocus();
+
 protected:
 	HWND m_hwnd;
 	bool m_isRunning;

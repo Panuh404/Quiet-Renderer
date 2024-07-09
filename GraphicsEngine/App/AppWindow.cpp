@@ -5,6 +5,7 @@
 #include "Engine/Graphics/DeviceContext.h"
 #include "Engine/Math/Matrix4x4.h"
 #include "Engine/Math/Vector3D.h"
+#include "Engine/Input/InputSystem.h"
 
 struct vertex
 {
@@ -41,18 +42,18 @@ void AppWindow::UpdateQuadPosition()
 	//cc.m_world.SetScale(Vector3D::Lerp(Vector3D(0.5, 0.5, 0), Vector3D(1, 1, 0), (sin(m_DeltaScale) + 1.0f)/2.0f));
 	//temp.SetTranslation(Vector3D::Lerp(Vector3D(-1.5,-1.5,0), Vector3D(1.5, 1.5, 0), m_DeltaPos));
 	//cc.m_world *= temp;
-	cc.m_world.SetScale(Vector3D(1,1,1));
+	cc.m_world.SetScale(Vector3D(m_Scale, m_Scale, m_Scale));
 
 	temp.SetIdentity();
-	temp.setRotationZ(m_DeltaScale);
+	temp.setRotationZ(0.0f);
 	cc.m_world *= temp;
 
 	temp.SetIdentity();
-	temp.setRotationY(m_DeltaScale);
+	temp.setRotationY(m_RotationY);
 	cc.m_world *= temp;
 
 	temp.SetIdentity();
-	temp.setRotationX(m_DeltaScale);
+	temp.setRotationX(m_RotationX);
 	cc.m_world *= temp;
 
 	cc.m_view.SetIdentity();
@@ -70,6 +71,9 @@ void AppWindow::UpdateQuadPosition()
 void AppWindow::OnCreate()
 {
 	Window::OnCreate();
+
+	InputSystem::Get()->AddListener(this);
+
 	GraphicsEngine::Get()->Init();
 	m_SwapChain = GraphicsEngine::Get()->CreateSwapChain();
 
@@ -143,6 +147,9 @@ void AppWindow::OnCreate()
 void AppWindow::OnUpdate()
 {
 	Window::OnUpdate();
+
+	InputSystem::Get()->Update();
+
 	// Clear Render Target
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->ClearRenderTargetColor(this->m_SwapChain, 0.3f, 0.4f, 0.7f, 1.0f);
 
@@ -184,4 +191,67 @@ void AppWindow::OnDestroy()
 	m_PixelShader->Release();
 	m_SwapChain->Release();
 	GraphicsEngine::Get()->Release();
+}
+
+void AppWindow::OnFocus()
+{
+	InputSystem::Get()->AddListener(this);
+}
+
+void AppWindow::OnKillFocus()
+{
+	InputSystem::Get()->RemoveListener(this);
+}
+
+void AppWindow::OnKeyDown(int key)
+{
+	float rotationSpeed = 2.5f;
+	if (key == 'W')
+	{
+		m_RotationX += rotationSpeed * m_DeltaTime;
+	}
+	else if (key == 'S')
+	{
+		m_RotationX -= rotationSpeed * m_DeltaTime;
+	}
+	else if (key == 'A')
+	{
+		m_RotationY += rotationSpeed * m_DeltaTime;
+	}
+	else if (key == 'D')
+	{
+		m_RotationY -= rotationSpeed * m_DeltaTime;
+	}
+
+}
+
+void AppWindow::OnKeyUp(int key)
+{
+	
+}
+
+void AppWindow::OnMouseMove(const Point& delta_mouse_pos)
+{
+	m_RotationX -= delta_mouse_pos.m_y * m_DeltaTime;
+	m_RotationY -= delta_mouse_pos.m_x * m_DeltaTime;
+}
+
+void AppWindow::OnLeftMouseDown(const Point& mouse_pos)
+{
+	m_Scale = 0.5f;
+}
+
+void AppWindow::OnLeftMouseUp(const Point& mouse_pos)
+{
+	m_Scale = 1.0f;
+}
+
+void AppWindow::OnRightMouseDown(const Point& mouse_pos)
+{
+	m_Scale = 2.0f;
+}
+
+void AppWindow::OnRightMouseUp(const Point& mouse_pos)
+{
+	m_Scale = 1.0f;
 }
