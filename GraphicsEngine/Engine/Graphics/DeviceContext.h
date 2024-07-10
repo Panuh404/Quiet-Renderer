@@ -8,19 +8,19 @@ public:
 	DeviceContext(ID3D11DeviceContext* deviceContext, RenderSystem* system);
 	~DeviceContext();
 
-	void ClearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
+	void ClearRenderTargetColor(SwapChainPtr swap_chain, float red, float green, float blue, float alpha);
 	void DrawTriangleList(UINT vertex_count, UINT start_vertex_index);
 	void DrawIndexTriangleList(UINT index_count, UINT start_vertex_index, UINT start_index_location);
 	void DrawTriangleStrip(UINT vertex_count, UINT start_vertex_index);
 
 	void SetViewportSize(UINT width, UINT height);
-	void SetVertexShader(VertexShader* vertex_shader);
-	void SetPixelShader(PixelShader* pixel_shader);
+	void SetVertexShader(VertexShaderPtr vertex_shader);
+	void SetPixelShader(PixelShaderPtr pixel_shader);
 
-	void SetVertexBuffer(VertexBuffer* vertex_buffer);
-	void SetIndexBuffer(IndexBuffer* index_buffer);
-	void SetConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
-	void SetConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);
+	void SetVertexBuffer(VertexBufferPtr vertex_buffer);
+	void SetIndexBuffer(IndexBufferPtr index_buffer);
+	void SetConstantBuffer(VertexShaderPtr vertex_shader, ConstantBufferPtr buffer);
+	void SetConstantBuffer(PixelShaderPtr pixel_shader, ConstantBufferPtr buffer);
 
 private:
 	ID3D11DeviceContext* m_DeviceContext;

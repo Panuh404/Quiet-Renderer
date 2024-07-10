@@ -14,7 +14,7 @@ DeviceContext::~DeviceContext()
 	m_DeviceContext->Release();
 }
 
-void DeviceContext::ClearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha)
+void DeviceContext::ClearRenderTargetColor(SwapChainPtr swap_chain, float red, float green, float blue, float alpha)
 {
 
 	FLOAT clearColor[] = { red, green, blue, alpha };
@@ -22,7 +22,7 @@ void DeviceContext::ClearRenderTargetColor(SwapChain* swap_chain, float red, flo
 	m_DeviceContext->OMSetRenderTargets(1, &swap_chain->m_RenderTargetView, NULL);
 }
 
-void DeviceContext::SetVertexBuffer(VertexBuffer* vertex_buffer)
+void DeviceContext::SetVertexBuffer(VertexBufferPtr vertex_buffer)
 {
 	UINT stride = vertex_buffer->m_SizeVertex;
 	UINT offset = 0;
@@ -31,7 +31,7 @@ void DeviceContext::SetVertexBuffer(VertexBuffer* vertex_buffer)
 	m_DeviceContext->IASetInputLayout(vertex_buffer->m_Layout);
 }
 
-void DeviceContext::SetIndexBuffer(IndexBuffer* index_buffer)
+void DeviceContext::SetIndexBuffer(IndexBufferPtr index_buffer)
 {
 
 	m_DeviceContext->IASetIndexBuffer(index_buffer->m_Buffer, DXGI_FORMAT_R32_UINT, 0);
@@ -66,22 +66,22 @@ void DeviceContext::SetViewportSize(UINT width, UINT height)
 	m_DeviceContext->RSSetViewports(1, &viewport);
 }
 
-void DeviceContext::SetVertexShader(VertexShader* vertex_shader)
+void DeviceContext::SetVertexShader(VertexShaderPtr vertex_shader)
 {
 	m_DeviceContext->VSSetShader(vertex_shader->m_VertexShader, nullptr, 0);
 }
 
-void DeviceContext::SetPixelShader(PixelShader* pixel_shader)
+void DeviceContext::SetPixelShader(PixelShaderPtr pixel_shader)
 {
 	m_DeviceContext->PSSetShader(pixel_shader->m_PixelShader, nullptr, 0);
 }
 
-void DeviceContext::SetConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer)
+void DeviceContext::SetConstantBuffer(VertexShaderPtr vertex_shader, ConstantBufferPtr buffer)
 {
 	m_DeviceContext->VSSetConstantBuffers(0, 1, &buffer->m_Buffer);
 }
 
-void DeviceContext::SetConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer)
+void DeviceContext::SetConstantBuffer(PixelShaderPtr pixel_shader, ConstantBufferPtr buffer)
 {
 	m_DeviceContext->PSSetConstantBuffers(0, 1, &buffer->m_Buffer);
 }

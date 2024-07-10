@@ -77,10 +77,9 @@ void AppWindow::OnCreate()
 
 	InputSystem::Get()->AddListener(this);
 	InputSystem::Get()->ShowCursor(false);
-	GraphicsEngine::Get()->Init();
 
 	RECT rc = this->GetClientWindowRect();
-	m_SwapChain = GraphicsEngine::Get()->GetRenderSystem()->CreateSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
+	m_SwapChain = GraphicsEngine::Get()->GetRenderSystem()->CreateSwapChain(this->m_HWND, rc.right - rc.left, rc.bottom - rc.top);
 
 	m_WorldCam.SetTranslation(Vector3D(0, 0, -2));
 
@@ -182,7 +181,6 @@ void AppWindow::OnUpdate()
 void AppWindow::OnDestroy()
 {
 	Window::OnDestroy();
-	GraphicsEngine::Get()->Release();
 }
 
 void AppWindow::OnFocus()

@@ -30,7 +30,7 @@ ConstantBuffer::~ConstantBuffer()
 	if (m_Buffer) m_Buffer->Release();
 }
 
-void ConstantBuffer::Update(DeviceContext* context, void* buffer)
+void ConstantBuffer::Update(DeviceContextPtr context, void* buffer)
 {
 	context->m_DeviceContext->UpdateSubresource(this->m_Buffer, NULL, NULL, buffer, NULL, NULL);
 }

@@ -1,6 +1,7 @@
 #include "InputSystem.h"
-
 #include <Windows.h>
+
+InputSystem* InputSystem::m_System = nullptr;
 
 InputSystem::InputSystem()
 {
@@ -8,6 +9,7 @@ InputSystem::InputSystem()
 
 InputSystem::~InputSystem()
 {
+	m_System = nullptr;
 }
 
 void InputSystem::Update()
@@ -114,4 +116,16 @@ InputSystem* InputSystem::Get()
 {
 	static InputSystem system;
 	return &system;
+}
+
+void InputSystem::Create()
+{
+	if (m_System) throw std::exception("ERROR::Input System already created");
+	m_System = new InputSystem();	
+}
+
+void InputSystem::Release()
+{
+	if (m_System) return;
+	delete m_System;
 }

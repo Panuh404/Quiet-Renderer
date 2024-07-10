@@ -1,15 +1,36 @@
 #include "AppWindow.h"
+#include "Engine/Input/InputSystem.h"
 
 int main(int argc, char* argv[])
 {
-	AppWindow app;
-	if (app.Init())
+	// Context Creation
+	try
 	{
-		while (app.IsRunning())
-		{
-			app.Broadcast();
-		}
+		GraphicsEngine::Create();
+		InputSystem::Create();
+	}
+	catch (...)
+	{
+		return -1;
 	}
 
+	// Window + Loop
+	{
+		try
+		{
+			AppWindow app;
+			while (app.IsRunning());
+		}
+		catch (...)
+		{
+			// Cleanup
+			GraphicsEngine::Release();
+			InputSystem::Release();
+			return -1;
+		}
+	}
+	// Cleanup
+	GraphicsEngine::Release();
+	InputSystem::Release();
 	return 0;
 }
