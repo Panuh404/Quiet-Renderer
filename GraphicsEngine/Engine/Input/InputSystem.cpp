@@ -27,7 +27,7 @@ void InputSystem::Update()
 		std::unordered_set<InputListener*>::iterator it = m_Listeners.begin();
 		while (it != m_Listeners.end())
 		{
-			(*it)->OnMouseMove(Point(current_mouse_pos.x - m_OldMousePos.m_x, current_mouse_pos.y - m_OldMousePos.m_y));
+			(*it)->OnMouseMove(Point(current_mouse_pos.x, current_mouse_pos.y));
 			++it;
 		}
 	}
@@ -98,6 +98,16 @@ void InputSystem::AddListener(InputListener* listener)
 void InputSystem::RemoveListener(InputListener* listener)
 {
 	m_Listeners.erase(listener);
+}
+
+void InputSystem::SetCursorPosition(const Point& pos)
+{
+	::SetCursorPos(pos.m_x, pos.m_y);
+}
+
+void InputSystem::ShowCursor(bool show)
+{
+	::ShowCursor(show);
 }
 
 InputSystem* InputSystem::Get()

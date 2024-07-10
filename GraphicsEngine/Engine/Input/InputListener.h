@@ -12,7 +12,7 @@ public:
 	virtual void OnKeyUp(int key) = 0;
 
 	// Mouse callback functions
-	virtual void OnMouseMove(const Point& delta_mouse_pos) = 0;
+	virtual void OnMouseMove(const Point& mouse_pos) = 0;
 
 	virtual void OnLeftMouseDown(const Point& mouse_pos) = 0;
 	virtual void OnLeftMouseUp(const Point& mouse_pos) = 0;

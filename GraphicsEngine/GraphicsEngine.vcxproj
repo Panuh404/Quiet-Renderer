@@ -107,6 +107,7 @@
     <ClInclude Include="Engine\Math\Matrix4x4.h" />
     <ClInclude Include="Engine\Math\Point.h" />
     <ClInclude Include="Engine\Math\Vector3D.h" />
+    <ClInclude Include="Engine\Math\Vector4D.h" />
     <ClInclude Include="Engine\Window\Window.h" />
     <ClInclude Include="Engine\Graphics\GraphicsEngine.h" />
     <ClInclude Include="Engine\Graphics\SwapChain.h" />

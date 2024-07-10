@@ -8,6 +8,7 @@
 #include "Engine/Graphics/VertexShader.h"
 #include "Engine/Graphics/PixelShader.h"
 #include "Engine/Input/InputListener.h"
+#include "Engine/Math/Matrix4x4.h"
 
 class  AppWindow : public Window, public InputListener
 {
@@ -15,7 +16,7 @@ public:
 	AppWindow();
 	~AppWindow();
 
-	void UpdateQuadPosition();
+	void Update();
 
 	// Inherited via window
 	void OnCreate() override;
@@ -28,7 +29,7 @@ public:
 	// Inherited via InputListener
 	void OnKeyDown(int key) override;
 	void OnKeyUp(int key) override;
-	void OnMouseMove(const Point& delta_mouse_pos) override;
+	void OnMouseMove(const Point& mouse_pos) override;
 	void OnLeftMouseDown(const Point& mouse_pos) override;
 	void OnLeftMouseUp(const Point& mouse_pos) override;
 	void OnRightMouseDown(const Point& mouse_pos) override;
@@ -46,12 +47,12 @@ private:
 	float m_NewDelta;
 	float m_DeltaTime;
 
-	float m_DeltaPos;
-	float m_DeltaScale;
-
 	float m_RotationX = 0.0f;
 	float m_RotationY = 0.0f;
-
 	float m_Scale = 1.0f;
+
+	float m_Forward = 0.0f;
+	float m_Right = 0.0f;
+	Matrix4x4 m_WorldCam;
 };
 

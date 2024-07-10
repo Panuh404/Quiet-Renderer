@@ -27,43 +27,46 @@ AppWindow::AppWindow() {}
 
 AppWindow::~AppWindow() {}
 
-void AppWindow::UpdateQuadPosition()
+void AppWindow::Update()
 {
 	constant cc;
 	Matrix4x4 temp;
-	m_DeltaPos += m_DeltaTime / 6.0f;
-	if (m_DeltaPos > 1.0f)
-	{
-		m_DeltaPos = 0;
-	}
-	m_DeltaScale += m_DeltaTime * 1.0f;
-
+	cc.m_world.SetIdentity();
 	cc.m_time = ::GetTickCount();
-	//cc.m_world.SetScale(Vector3D::Lerp(Vector3D(0.5, 0.5, 0), Vector3D(1, 1, 0), (sin(m_DeltaScale) + 1.0f)/2.0f));
-	//temp.SetTranslation(Vector3D::Lerp(Vector3D(-1.5,-1.5,0), Vector3D(1.5, 1.5, 0), m_DeltaPos));
-	//cc.m_world *= temp;
-	cc.m_world.SetScale(Vector3D(m_Scale, m_Scale, m_Scale));
 
-	temp.SetIdentity();
-	temp.setRotationZ(0.0f);
-	cc.m_world *= temp;
-
-	temp.SetIdentity();
-	temp.setRotationY(m_RotationY);
-	cc.m_world *= temp;
+	Matrix4x4 world_cam;
+	world_cam.SetIdentity();
 
 	temp.SetIdentity();
 	temp.setRotationX(m_RotationX);
-	cc.m_world *= temp;
+	world_cam *= temp;
 
-	cc.m_view.SetIdentity();
-	cc.m_proj.SetOrthoLH
+	temp.SetIdentity();
+	temp.setRotationY(m_RotationY);
+	world_cam *= temp;
+
+	// Move Forward
+	Vector3D new_pos = m_WorldCam.GetTranslation() + world_cam.GetZDirection() * (m_Forward * 5.0f * m_DeltaTime);
+	// Move Right
+	new_pos  = new_pos + world_cam.GetXDirection() * (m_Right * 5.0f * m_DeltaTime);
+
+	world_cam.SetTranslation(new_pos);
+	m_WorldCam = world_cam;
+	world_cam.Inverse();
+
+	cc.m_view = world_cam;
+	/*cc.m_proj.SetOrthoLH
 	(
 		(this->GetClientWindowRect().right - this->GetClientWindowRect().left) / 400.0f,
 		(this->GetClientWindowRect().bottom - this->GetClientWindowRect().top) / 400.0f,
 		-4.0f,
 		4.0f
-	);
+	);*/
+
+	int width = this->GetClientWindowRect().right - this->GetClientWindowRect().left;
+	int height = this->GetClientWindowRect().bottom - this->GetClientWindowRect().top;
+
+	cc.m_proj.SetPerspectiveFOVLH(1.57f, ((float)width / (float)height), 0.1f, 100.0f);
 
 	m_ConstantBuffer->Update(GraphicsEngine::Get()->GetImmediateDeviceContext(), &cc);
 }
@@ -73,12 +76,14 @@ void AppWindow::OnCreate()
 	Window::OnCreate();
 
 	InputSystem::Get()->AddListener(this);
-
+	InputSystem::Get()->ShowCursor(false);
 	GraphicsEngine::Get()->Init();
 	m_SwapChain = GraphicsEngine::Get()->CreateSwapChain();
 
 	RECT rc = this->GetClientWindowRect();
 	m_SwapChain->Init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
+
+	m_WorldCam.SetTranslation(Vector3D(0, 0, -2));
 
 	vertex vertex_list[] = 
 	{
@@ -158,7 +163,7 @@ void AppWindow::OnUpdate()
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	// Constant Buffer
-	UpdateQuadPosition();
+	Update();
 
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_VertexShader, m_ConstantBuffer);
 	GraphicsEngine::Get()->GetImmediateDeviceContext()->SetConstantBuffer(m_PixelShader, m_ConstantBuffer);
@@ -208,32 +213,38 @@ void AppWindow::OnKeyDown(int key)
 	float rotationSpeed = 2.5f;
 	if (key == 'W')
 	{
-		m_RotationX += rotationSpeed * m_DeltaTime;
+		m_Forward = 1.0f;
 	}
 	else if (key == 'S')
 	{
-		m_RotationX -= rotationSpeed * m_DeltaTime;
-	}
-	else if (key == 'A')
-	{
-		m_RotationY += rotationSpeed * m_DeltaTime;
+		m_Forward = -1.0f;
 	}
 	else if (key == 'D')
 	{
-		m_RotationY -= rotationSpeed * m_DeltaTime;
+		m_Right = 1.0f;
+	}
+	else if (key == 'A')
+	{
+		m_Right = -1.0f;
 	}
 
 }
 
 void AppWindow::OnKeyUp(int key)
 {
-	
+	m_Forward = 0.0f;
+	m_Right = 0.0f;
 }
 
-void AppWindow::OnMouseMove(const Point& delta_mouse_pos)
+void AppWindow::OnMouseMove(const Point& mouse_pos)
 {
-	m_RotationX -= delta_mouse_pos.m_y * m_DeltaTime;
-	m_RotationY -= delta_mouse_pos.m_x * m_DeltaTime;
+	int width = this->GetClientWindowRect().right - this->GetClientWindowRect().left;
+	int height = this->GetClientWindowRect().bottom - this->GetClientWindowRect().top;
+
+	m_RotationX += (mouse_pos.m_y - (height / 2.0f)) * m_DeltaTime * 0.4f;
+	m_RotationY += (mouse_pos.m_x - (width / 2.0f)) * m_DeltaTime * 0.4f;
+
+	InputSystem::Get()->SetCursorPosition(Point(width / 2.0f, height / 2.0f));
 }
 
 void AppWindow::OnLeftMouseDown(const Point& mouse_pos)
