@@ -42,6 +42,7 @@ private:
 	ConstantBufferPtr	m_ConstantBuffer;
 	VertexShaderPtr		m_VertexShader;
 	PixelShaderPtr		m_PixelShader;
+	TexturePtr			m_WoodTex;
 
 	float m_OldDelta;
 	float m_NewDelta;

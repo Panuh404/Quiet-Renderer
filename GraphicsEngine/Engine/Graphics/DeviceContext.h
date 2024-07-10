@@ -17,6 +17,9 @@ public:
 	void SetVertexShader(VertexShaderPtr vertex_shader);
 	void SetPixelShader(PixelShaderPtr pixel_shader);
 
+	void SetTexture(VertexShaderPtr vertex_shader, TexturePtr texture);
+	void SetTexture(PixelShaderPtr pixel_shader, TexturePtr texture);
+
 	void SetVertexBuffer(VertexBufferPtr vertex_buffer);
 	void SetIndexBuffer(IndexBufferPtr index_buffer);
 	void SetConstantBuffer(VertexShaderPtr vertex_shader, ConstantBufferPtr buffer);

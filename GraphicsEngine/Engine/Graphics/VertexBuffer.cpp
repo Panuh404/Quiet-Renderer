@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+ #include "VertexBuffer.h"
 #include <exception>
 #include "Engine/Renderer/RenderSystem.h"
 
@@ -29,9 +29,8 @@ VertexBuffer::VertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list
 	// A description of a single element for the input-assembler stage.
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{"POSITION",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR",		0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR",		1, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION",	0, DXGI_FORMAT_R32G32B32_FLOAT,	0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD",	0, DXGI_FORMAT_R32G32_FLOAT,	0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
 	};
 	UINT size_layout = ARRAYSIZE(layout);

@@ -22,6 +22,9 @@ To build and run this project, you will need:
 - Microsoft Visual Studio (2019 or later)
 - DirectX SDK (Included in Windows 8 and later)
 
+### Dependences
+- DirectXTex
+
 ### Building the Project
 
 1. Clone the repository:

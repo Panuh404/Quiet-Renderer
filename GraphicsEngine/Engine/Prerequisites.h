@@ -2,22 +2,35 @@
 
 #include <memory>
 
+class RenderSystem;
+class GraphicsEngine;
 class SwapChain;
 class DeviceContext;
+
 class VertexBuffer;
 class ConstantBuffer;
 class IndexBuffer;
+
 class VertexShader;
 class PixelShader;
-class RenderSystem;
-class GraphicsEngine;
 
-typedef std::shared_ptr<SwapChain>		SwapChainPtr;
-typedef std::shared_ptr<DeviceContext>	DeviceContextPtr;
-typedef std::shared_ptr<VertexBuffer>	VertexBufferPtr;
-typedef std::shared_ptr<ConstantBuffer> ConstantBufferPtr;
-typedef std::shared_ptr<IndexBuffer>	IndexBufferPtr;
-typedef std::shared_ptr<VertexShader>	VertexShaderPtr;
-typedef std::shared_ptr<PixelShader>	PixelShaderPtr;
-typedef std::shared_ptr<RenderSystem>	RenderSystemPtr;
-typedef std::shared_ptr<GraphicsEngine>	GraphicsEnginePtr;
+class Resource;
+class ResourceManager;
+class Texture;
+class TextureManager;
+
+
+typedef std::shared_ptr<RenderSystem>		RenderSystemPtr;
+typedef std::shared_ptr<GraphicsEngine>		GraphicsEnginePtr;
+typedef std::shared_ptr<SwapChain>			SwapChainPtr;
+typedef std::shared_ptr<DeviceContext>		DeviceContextPtr;
+
+typedef std::shared_ptr<VertexBuffer>		VertexBufferPtr;
+typedef std::shared_ptr<ConstantBuffer>		ConstantBufferPtr;
+typedef std::shared_ptr<IndexBuffer>		IndexBufferPtr;
+
+typedef std::shared_ptr<VertexShader>		VertexShaderPtr;
+typedef std::shared_ptr<PixelShader>		PixelShaderPtr;
+
+typedef std::shared_ptr<Resource>			ResourcePtr;
+typedef std::shared_ptr<Texture>			TexturePtr;
