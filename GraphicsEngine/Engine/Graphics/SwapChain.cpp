@@ -1,17 +1,10 @@
 #include "SwapChain.h"
-#include "GraphicsEngine.h"
+#include <exception>
+#include "Engine/Renderer/RenderSystem.h"
 
-SwapChain::SwapChain()
+SwapChain::SwapChain(HWND hwnd, UINT width, UINT height, RenderSystem* system) : m_System(system)
 {
-}
-
-SwapChain::~SwapChain()
-{
-}
-
-bool SwapChain::Init(HWND hwnd, UINT width, UINT height)
-{
-	ID3D11Device* device = GraphicsEngine::Get()->m_D3DDevice;
+	ID3D11Device* device = m_System->m_D3DDevice;
 
 	DXGI_SWAP_CHAIN_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
@@ -28,39 +21,36 @@ bool SwapChain::Init(HWND hwnd, UINT width, UINT height)
 	desc.Windowed = true;
 
 	// Create the swap chain for the window indicated by HWND parameter
-	HRESULT hr = GraphicsEngine::Get()->m_DXGIFactory->CreateSwapChain(device, &desc, &m_SwapChain);
+	HRESULT hr = m_System->m_DXGIFactory->CreateSwapChain(device, &desc, &m_SwapChain);
 	if (FAILED(hr))
 	{
-		return false;
+		throw std::exception("ERROR::Swap Chain - Creation Failed");
 	}
 
-	//Get the back buffer color and create its render target view
+	// Get the back buffer color and create its render target view
 	ID3D11Texture2D* buffer = NULL;
 	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&buffer);
 	if (FAILED(hr))
 	{
-		return false;
+		throw std::exception("ERROR::Swap Chain - Buffer Error");
 	}
 
 	hr = device->CreateRenderTargetView(buffer, NULL, &m_RenderTargetView);
 	buffer->Release();
 	if (FAILED(hr))
 	{
-		return false;
+		throw std::exception("ERROR::Render Target View- Creation Failed");
 	}
+}
 
-	return true;
+SwapChain::~SwapChain()
+{
+	m_RenderTargetView->Release();
+	m_SwapChain->Release();
 }
 
 bool SwapChain::Present(bool vsync)
 {
 	m_SwapChain->Present(vsync, NULL);
-	return true;
-}
-
-bool SwapChain::Release()
-{
-	m_SwapChain->Release();
-	delete this;
 	return true;
 }

@@ -9,30 +9,28 @@ class IndexBuffer;
 class VertexShader;
 class PixelShader;
 
-class GraphicsEngine
+class RenderSystem
 {
 public:
-	GraphicsEngine();
-	~GraphicsEngine();
+	RenderSystem();
+	~RenderSystem();
 
-	bool Init();		// Initialize GraphicsEngine and DirectX 11 Device
+	bool Init();		// Initialize Engine and DirectX 11 Device
 	bool Release();		// Release all resources loaded
 
-	DeviceContext*	GetImmediateDeviceContext();
-	SwapChain*		CreateSwapChain();
+	SwapChain* CreateSwapChain(HWND hwnd, UINT width, UINT height);
+	DeviceContext* GetImmediateDeviceContext();
 
-	VertexBuffer*	CreateVertexBuffer();
-	IndexBuffer*	CreateIndexBuffer();
-	ConstantBuffer* CreateConstantBuffer();
+	VertexBuffer* CreateVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
+	IndexBuffer* CreateIndexBuffer(void* list_indices, UINT size_list);
+	ConstantBuffer* CreateConstantBuffer(void* buffer, UINT size_buffer);
 
-	VertexShader*	CreateVertexShader(const void* shader_byte_code, size_t byte_Code_Size);
-	PixelShader*	CreatePixelShader(const void* shader_byte_code, size_t byte_Code_Size);
+	VertexShader* CreateVertexShader(const void* shader_byte_code, size_t byte_Code_Size);
+	PixelShader* CreatePixelShader(const void* shader_byte_code, size_t byte_Code_Size);
 
 	bool CompileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 	bool CompilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size);
 	void ReleaseCompiledShaders();
-
-	static GraphicsEngine* Get();
 
 private:
 	DeviceContext* m_IMMDeviceContext;
@@ -40,7 +38,7 @@ private:
 	ID3D11Device* m_D3DDevice;
 	D3D_FEATURE_LEVEL m_FeatureLevel;
 
-	IDXGIDevice*  m_DXGIDevice;
+	IDXGIDevice* m_DXGIDevice;
 	IDXGIAdapter* m_DXGIAdapter;
 	IDXGIFactory* m_DXGIFactory;
 	ID3D11DeviceContext* m_IMMContext;
@@ -56,7 +54,6 @@ private:
 	friend class VertexBuffer;
 	friend class IndexBuffer;
 	friend class ConstantBuffer;
-
 	friend class VertexShader;
 	friend class PixelShader;
 };

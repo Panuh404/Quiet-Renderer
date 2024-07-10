@@ -91,13 +91,14 @@
     <ClCompile Include="Engine\Graphics\ConstantBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\DeviceContext.cpp" />
     <ClCompile Include="Engine\Window\Window.cpp" />
-    <ClCompile Include="Engine\Graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="Engine\GraphicsEngine.cpp" />
     <ClCompile Include="Engine\Graphics\SwapChain.cpp" />
     <ClCompile Include="Engine\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\VertexShader.cpp" />
     <ClCompile Include="Engine\Graphics\PixelShader.cpp" />
     <ClCompile Include="Engine\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="Engine\Input\InputSystem.cpp" />
+    <ClCompile Include="Engine\Renderer\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\AppWindow.h" />
@@ -108,14 +109,16 @@
     <ClInclude Include="Engine\Math\Point.h" />
     <ClInclude Include="Engine\Math\Vector3D.h" />
     <ClInclude Include="Engine\Math\Vector4D.h" />
+    <ClInclude Include="Engine\Prerequisites.h" />
     <ClInclude Include="Engine\Window\Window.h" />
-    <ClInclude Include="Engine\Graphics\GraphicsEngine.h" />
+    <ClInclude Include="Engine\GraphicsEngine.h" />
     <ClInclude Include="Engine\Graphics\SwapChain.h" />
     <ClInclude Include="Engine\Graphics\VertexBuffer.h" />
     <ClInclude Include="Engine\Graphics\VertexShader.h" />
     <ClInclude Include="Engine\Graphics\PixelShader.h" />
     <ClInclude Include="Engine\Graphics\IndexBuffer.h" />
     <ClInclude Include="Engine\Input\InputSystem.h" />
+    <ClInclude Include="Engine\Renderer\RenderSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">

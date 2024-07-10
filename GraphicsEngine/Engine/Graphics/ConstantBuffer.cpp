@@ -1,16 +1,11 @@
 #include "ConstantBuffer.h"
+
+#include <exception>
 #include "DeviceContext.h"
-#include "GraphicsEngine.h"
+#include "Engine/Renderer/RenderSystem.h"
 
-ConstantBuffer::ConstantBuffer() {}
-
-ConstantBuffer::~ConstantBuffer() {}
-
-bool ConstantBuffer::Load(void* buffer, UINT size_buffer)
+ConstantBuffer::ConstantBuffer(void* buffer, UINT size_buffer, RenderSystem* system) : m_System(system)
 {
-	if (m_Buffer) m_Buffer->Release();
-
-
 	// Describes a buffer resource
 	D3D11_BUFFER_DESC buffer_Desc = {};
 	buffer_Desc.Usage = D3D11_USAGE_DEFAULT;
@@ -24,22 +19,18 @@ bool ConstantBuffer::Load(void* buffer, UINT size_buffer)
 	init_data.pSysMem = buffer;
 
 	// Created Vertex Buffer
-	if (FAILED(GraphicsEngine::Get()->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
+	if (FAILED(m_System->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
 	{
-		return false;
+		throw std::exception("ERROR::Constant Buffer - Creation Failed");
 	}
+}
 
-	return true;
+ConstantBuffer::~ConstantBuffer()
+{
+	if (m_Buffer) m_Buffer->Release();
 }
 
 void ConstantBuffer::Update(DeviceContext* context, void* buffer)
 {
 	context->m_DeviceContext->UpdateSubresource(this->m_Buffer, NULL, NULL, buffer, NULL, NULL);
-}
-
-bool ConstantBuffer::Release()
-{
-	if(m_Buffer) m_Buffer->Release();
-	delete this;
-	return false;
 }

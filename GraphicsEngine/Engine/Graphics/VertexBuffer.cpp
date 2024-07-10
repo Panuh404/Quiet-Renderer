@@ -1,16 +1,10 @@
 #include "VertexBuffer.h"
-#include "GraphicsEngine.h"
+#include <exception>
+#include "Engine/Renderer/RenderSystem.h"
 
-VertexBuffer::VertexBuffer() : m_Layout(0), m_Buffer(0) {}
-
-VertexBuffer::~VertexBuffer() {}
-
-bool VertexBuffer::Load(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
+VertexBuffer::VertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader, RenderSystem* system)
+	: m_System(system), m_Layout(0), m_Buffer(0)
 {
-	if (m_Buffer) m_Buffer->Release();
-	if (m_Layout) m_Layout->Release();
-
-
 	// Describes a buffer resource
 	D3D11_BUFFER_DESC buffer_Desc = {};
 	buffer_Desc.Usage = D3D11_USAGE_DEFAULT;
@@ -27,9 +21,9 @@ bool VertexBuffer::Load(void* list_vertices, UINT size_vertex, UINT size_list, v
 	m_SizeList = size_list;
 
 	// Created Vertex Buffer
-	if (FAILED(GraphicsEngine::Get()->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
+	if (FAILED(m_System->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
 	{
-		return false;
+		throw std::exception("ERROR::Vertex Buffer - Creation Failed");
 	}
 
 	// A description of a single element for the input-assembler stage.
@@ -38,25 +32,21 @@ bool VertexBuffer::Load(void* list_vertices, UINT size_vertex, UINT size_list, v
 		{"POSITION",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR",		0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR",		1, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		
+
 	};
 	UINT size_layout = ARRAYSIZE(layout);
 
 	// Create an input-layout object to describe the input-buffer data for the input-assembler stage
-	if (FAILED(GraphicsEngine::Get()->m_D3DDevice->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_Layout)))
+	if (FAILED(m_System->m_D3DDevice->CreateInputLayout(layout, size_layout, shader_byte_code, size_byte_shader, &m_Layout)))
 	{
-		return false;
+		throw std::exception("ERROR::Input Layout - Creation Failed");
 	}
-	
-	return true;
 }
 
-bool VertexBuffer::Release()
+VertexBuffer::~VertexBuffer()
 {
 	m_Layout->Release();
 	m_Buffer->Release();
-	delete this;
-	return true;
 }
 
 UINT VertexBuffer::GetSizeVertexList()

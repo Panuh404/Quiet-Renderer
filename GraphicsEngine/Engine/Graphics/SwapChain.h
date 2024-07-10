@@ -1,21 +1,19 @@
 #pragma once
 #include <d3d11.h>
-
-class DeviceContext;
+#include "Engine/Prerequisites.h"
 
 class SwapChain
 {
 public:
-	SwapChain();
+	SwapChain(HWND hwnd, UINT width, UINT height, RenderSystem* system);
 	~SwapChain();
 
-	bool Init(HWND hwnd, UINT width, UINT height);
 	bool Present(bool vsync);
-	bool Release();
 
 private:
 	IDXGISwapChain* m_SwapChain;
 	ID3D11RenderTargetView* m_RenderTargetView;
+	RenderSystem* m_System = nullptr;
 
 	friend class DeviceContext;
 };

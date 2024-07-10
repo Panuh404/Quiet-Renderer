@@ -1,17 +1,13 @@
 #pragma once
 #include <d3d11.h>
 #include "windows.h"
-
-class DeviceContext;
+#include "Engine/Prerequisites.h"
 
 class VertexBuffer
 {
 public:
-	VertexBuffer();
+	VertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader, RenderSystem* system);
 	~VertexBuffer();
-
-	bool Load(void* list_vertices,UINT size_vertex,UINT size_list, void* shader_byte_code, UINT size_byte_shader);
-	bool Release();
 
 	UINT GetSizeVertexList();
 
@@ -21,6 +17,7 @@ private:
 
 	ID3D11Buffer* m_Buffer;
 	ID3D11InputLayout* m_Layout;
+	RenderSystem* m_System = nullptr;
 
 	friend class DeviceContext;
 };

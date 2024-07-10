@@ -1,23 +1,18 @@
 #pragma once
 #include "VertexBuffer.h"
-
-class GraphicsEngine;
-class DeviceContext;
+#include "Engine/Prerequisites.h"
 
 class PixelShader
 {
 public:
-	PixelShader();
+	PixelShader(const void* shader_byte_code, size_t byte_code_size, RenderSystem* system);
 	~PixelShader();
 
-	void Release();
-
 private:
-	bool Init(const void* shader_byte_code, size_t byte_code_size);
-
 	ID3D11PixelShader* m_PixelShader;
+	RenderSystem* m_System = nullptr;
 
-	friend class GraphicsEngine;
+	friend class RenderSystem;
 	friend class DeviceContext;
 };
 

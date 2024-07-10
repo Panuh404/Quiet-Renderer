@@ -1,15 +1,10 @@
 #include "IndexBuffer.h"
 
-#include "GraphicsEngine.h"
+#include <exception>
+#include "Engine/Renderer/RenderSystem.h"
 
-IndexBuffer::IndexBuffer() : m_Buffer(0) {}
-
-IndexBuffer::~IndexBuffer() {}
-
-bool IndexBuffer::Load(void* list_indices, UINT size_list)
+IndexBuffer::IndexBuffer(void* list_indices, UINT size_list, RenderSystem* system) : m_System(system), m_Buffer(0)
 {
-	if (m_Buffer) m_Buffer->Release();
-
 	// Describes a buffer resource
 	D3D11_BUFFER_DESC buffer_Desc = {};
 	buffer_Desc.Usage = D3D11_USAGE_DEFAULT;
@@ -25,18 +20,15 @@ bool IndexBuffer::Load(void* list_indices, UINT size_list)
 	m_SizeList = size_list;
 
 	// Created Vertex Buffer
-	if (FAILED(GraphicsEngine::Get()->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
+	if (FAILED(m_System->m_D3DDevice->CreateBuffer(&buffer_Desc, &init_data, &m_Buffer)))
 	{
-		return false;
+		throw std::exception("ERROR::Index Buffer - Creation Failed");
 	}
-	return true;
 }
 
-bool IndexBuffer::Release()
+IndexBuffer::~IndexBuffer()
 {
 	m_Buffer->Release();
-	delete this;
-	return true;
 }
 
 UINT IndexBuffer::GetSizeIndexList()

@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Window/Window.h"
-#include "Engine/Graphics/GraphicsEngine.h"
+#include "Engine/GraphicsEngine.h"
 #include "Engine/Graphics/SwapChain.h"
 #include "Engine/Graphics/VertexBuffer.h"
 #include "Engine/Graphics/IndexBuffer.h"
